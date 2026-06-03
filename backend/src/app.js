@@ -3,4 +3,6 @@ import { appRoutes } from './routes/appRoutes.js'
 
 export const app = express()
 
-app.get('/',appRoutes)
+// app.get('/',appRoutes)
+
+app.use('/api')
