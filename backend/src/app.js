@@ -5,4 +5,4 @@ export const app = express()
 
 // app.get('/',appRoutes)
 
-app.use('/api')
+// app.use('/api')
