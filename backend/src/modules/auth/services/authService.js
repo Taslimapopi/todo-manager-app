@@ -1,7 +1,12 @@
-export const createAuthService = () => {
+import { createAuthRepository } from "../repositories/authRepository.js"
+
+export const createAuthService = (userRepository = createAuthRepository() ) => {
     return {
         register: async ({ name, email, password }) => {
-            const user =
+            const user = userRepository.create({ name, email, password })
+            return{
+                user
+            }
         }
     }
 }
