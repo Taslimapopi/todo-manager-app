@@ -5,9 +5,7 @@ export const validate = (schema) => (req, _res, next) => {
     const parsed = schema.parse({
       body: req.body,
     });
-    // if (body) {
-    //   parsed.body = req.body;
-    // }
+  
 
      if ('body' in parsed) req.body = parsed.body;
     next();
