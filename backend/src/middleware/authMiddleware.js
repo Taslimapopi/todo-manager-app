@@ -4,7 +4,7 @@ import { verifyAccessToken } from "../utils/jwt";
 
 const userRepository = createAuthRepository()
 
-export const protect = asyncHandler(async(req,_parse, next)=>{
+export const protect = asyncHandler(async(req,_res, next)=>{
     const headers = req.headers.authorization
     const token = headers.split(' ')[1]
     const decoded = verifyAccessToken(token)
