@@ -5,6 +5,7 @@ const envSchema = z.object({
     PORT: z.coerce.number().int().min(1).max(65535).default(5000),
     MONGODB_URI: z.string().min(1, 'mongodb Uri required'),
     JWT_ACCESS_SECRET: z.string().min(1, "JWT secret required"),
+    JWT_REFRESH_SECRET: z.string().min(1, "JWT secret required")
 
 })
 

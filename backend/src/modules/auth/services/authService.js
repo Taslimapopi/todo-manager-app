@@ -1,11 +1,13 @@
-import { generateAccessToken } from "../../../utils/jwt.js"
+import { generateAccessToken, generateRefreshToken } from "../../../utils/jwt.js"
 import { createAuthRepository } from "../repositories/authRepository.js"
 
 export const createAuthService = (userRepository = createAuthRepository() ) => {
       const generateTokenPair = async (userId) => {
         const accessToken =await generateAccessToken(userId)
+        const refreshToken =await generateRefreshToken(userId)
         return {
-            accessToken
+            accessToken,
+            refreshToken,
         }
     }
     return {
