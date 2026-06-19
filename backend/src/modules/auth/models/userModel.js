@@ -1,6 +1,7 @@
 
 import mongoose from "mongoose";
 import { validation } from "../../../shared/constant.js";
+import bcrypt from 'bcryptjs'
 
 const userSchema = new mongoose.Schema(
   {
@@ -36,5 +37,16 @@ const userSchema = new mongoose.Schema(
     versionKey: false,
   },
 );
+
+userSchema.pre('save',async function (next) {
+  if(!isModified('password')) return next()
+    try{
+  this.password= await bcrypt.hash(this.password,validation.bcrypt_salt_round)
+  next()
+  }catch(error){
+    next(error)
+  }
+  
+})
 
 export const User = mongoose.models.User || mongoose.model("User", userSchema);
