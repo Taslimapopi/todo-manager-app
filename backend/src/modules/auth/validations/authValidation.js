@@ -6,9 +6,9 @@ const emailField = z.string()
     .min(1, 'email is required')
     .max(100,'email is too long')
     .toLowerCase()
-    .pipe(z.email('please provide a valid email')),
+    .pipe(z.email('please provide a valid email'))
 
-    const passwordField = z.string()
+const passwordField = z.string()
     .min(validation.passMinLength,`password must be at least ${validation.passMinLength} characters `)
     .max(120, 'password cannot exceed 120 characters')
     .regex(/[A-Z]/,'password must contain at least 1 upper case letter')

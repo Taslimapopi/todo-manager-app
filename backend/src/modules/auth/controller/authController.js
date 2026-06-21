@@ -24,5 +24,5 @@ export const register = asyncHandler(async(req,res)=>{
 
 export const login = asyncHandler(async(req, res)=>{
   const {user , accessToken, refreshToken} =await authService.login(req.body)
-  new ApiResponse(http_status.ok, {}, 'logged in successfully').send(res)
+  new ApiResponse(http_status.ok, {user, accessToken, refreshToken}, 'logged in successfully').send(res)
 })

@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs"
 import { generateAccessToken, generateRefreshToken } from "../../../utils/jwt.js"
 import { createAuthRepository } from "../repositories/authRepository.js"
 
@@ -22,6 +23,16 @@ export const createAuthService = (userRepository = createAuthRepository() ) => {
         },
         login : async ({email, password}) =>{
             const user = await userRepository.findByEmail(email)
+            const tokens = await generateTokenPair(user._id)
+            const isMatch = await bcrypt.compare(password, user.password)
+            if(!isMatch){
+                console.error('invalid email or password')
+            }
+            const {password: _, ...userWithoutPassword} = user
+            return {
+                user : userWithoutPassword,
+                ...tokens
+            }
         }
     }
 }
