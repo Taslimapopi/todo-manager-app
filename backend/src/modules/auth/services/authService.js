@@ -19,6 +19,9 @@ export const createAuthService = (userRepository = createAuthRepository() ) => {
                 ...tokens
 
             }
+        },
+        login : async ({email, password}) =>{
+            const user = await userRepository.findByEmail(email)
         }
     }
 }
