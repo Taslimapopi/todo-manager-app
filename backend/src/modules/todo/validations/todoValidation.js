@@ -15,6 +15,8 @@ export const createTodoSchema = z.object({
         status : z.enum(valid_todo_status, {
             message: `status must be ${valid_todo_status.join(', ')}`
         })
-        .optional()
+        .optional(),
+        user: z.string()        
+      .min(1, 'user is required')
     })
 })

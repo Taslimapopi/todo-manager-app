@@ -1,13 +1,14 @@
-import { createTodoRepository } from "../repositories/todoRepository"
+import { createTodoRepository } from "../repositories/todoRepository.js"
 
-export const todoService = (todoRepository = createTodoRepository())=>{
+export const createTodoService = (todoRepository = createTodoRepository())=>{
     return{
-        create : (todoData) =>{
+        create : async todoData =>{
             try{
+                return await todoRepository.create(todoData)
 
             }
             catch(error){
-                console.error()
+                console.error(error)
             }
         }
     }

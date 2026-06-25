@@ -1,14 +1,19 @@
-import { Todo } from "../models/todoModel"
+import { Todo } from "../models/todoModel.js"
 
 export const createTodoRepository = ()=>{
     return {
         create : async todoData =>{
             try{
-                const todo =await Todo.create()
+                const todo =await Todo.create(todoData)
+
+                return {
+                    todo
+                }
 
             }
             catch(error){
-                console.error()
+                console.error('Repository error:', error.message);
+  throw error;
             }
         }
     }
