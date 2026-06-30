@@ -9,7 +9,7 @@ import { AuthService } from "../services/authService.js";
 const authService = new AuthService()
 
 export const register = asyncHandler(async(req,res)=>{
-    const {user } =await authService.register(req.body)
+    const {user , accessToken, refreshToken} =await authService.register(req.body)
     // const {user , accessToken, refreshToken} =await authService.register(req.body)
   //   return res.status(http_status.created).json({
   //   success: true,
@@ -21,7 +21,7 @@ export const register = asyncHandler(async(req,res)=>{
   // });
 
   // new ApiResponse(http_status.created, {user, accessToken, refreshToken},"user created successfully").send(res)
-  new ApiResponse(http_status.created, {user},"user created successfully").send(res)
+  new ApiResponse(http_status.created, {user, accessToken, refreshToken},"user created successfully").send(res)
 
 })
 
