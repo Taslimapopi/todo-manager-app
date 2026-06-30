@@ -1,19 +1,38 @@
-import { Todo } from "../models/todoModel.js"
+// import { Todo } from "../models/todoModel.js"
 
-export const createTodoRepository = ()=>{
-    return {
-        create : async todoData =>{
-            try{
-                const todo =await Todo.create(todoData)
+import { Todo } from "../models/todoModel.js";
 
-                return {
-                    todo
-                }
+// export const createTodoRepository = ()=>{
+//     return {
+//         create : async todoData =>{
+//             try{
+//                 const todo =await Todo.create(todoData)
 
-            }
-            catch(error){
-                console.error('Repository error:', error.message);
-  throw error;
+//                 return {
+//                     todo
+//                 }
+
+//             }
+//             catch(error){
+//                 console.error('Repository error:', error.message);
+//   throw error;
+//             }
+//         }
+//     }
+// }
+
+export class TodoRepository {
+    constructor(model = Todo){
+
+        this.model = model
+
+    }
+    async create (todoData) {
+        try{
+         return   await this.model.create(todoData)
+        }catch(error){
+            if(error.code ===11000){
+                throw new Error('duplicate title')
             }
         }
     }
