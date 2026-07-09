@@ -8,6 +8,7 @@ const todoSchema = new mongoose.Schema(
       type: String,
       required: [true, "title is required"],
       minLength: [1, "title cannot be empty"],
+      unique: true,
       maxLength: [
         validation.todo_title_length,
         `title cannot exceed ${validation.todo_title_length} characters`,

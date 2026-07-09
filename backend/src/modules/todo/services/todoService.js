@@ -20,12 +20,12 @@ import { TodoRepository } from "../repositories/todoRepository.js";
 
 export class TodoService {
     constructor(repository = new TodoRepository()){
-        this.repository = repository
+        this.todoRepository = repository
 
     }
     async create(todoData){
         try{
-            await this.repository.create({...todoData}) 
+            await this.todoRepository.create({...todoData}) 
         }catch(error){
             if(error.message==='duplicate title'){
                 throw new ApiError(http_status.conflict, 'title already existed')
