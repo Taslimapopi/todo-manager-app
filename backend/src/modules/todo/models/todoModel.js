@@ -4,6 +4,12 @@ import { todo_status, valid_todo_status } from "../../../shared/enums.js";
 
 const todoSchema = new mongoose.Schema(
   {
+    user : {
+      type : mongoose.Schema.Types.ObjectId,
+      required : true,
+      ref : 'User'
+
+    },
     title: {
       type: String,
       required: [true, "title is required"],
@@ -34,11 +40,6 @@ const todoSchema = new mongoose.Schema(
       },
       default: todo_status.active,
     },
-    // user: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   required: true,
-    //   ref: "User",
-    // },
   },
 
   {
@@ -53,6 +54,9 @@ const todoSchema = new mongoose.Schema(
   },
 );
 
+export const title_collation = {locale : 'en', strength : 2}
+
+todoSchema.index({user : 1, status: 1}, {unique : true, collation : title_collation})
 todoSchema.index({user : 1 , status : 1, createdAt : -1})
 todoSchema.index({user : 1 , title : 'text', description : 'text'})
 
