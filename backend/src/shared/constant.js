@@ -12,4 +12,5 @@ export const http_status = {
     conflict : 409,
     unAuthorized : 401,
     internal_server_error : 500,
+    bad_request : 400
 }
