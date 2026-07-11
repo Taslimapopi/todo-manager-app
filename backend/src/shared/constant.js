@@ -4,6 +4,7 @@ export const validation = Object.freeze({
     bcrypt_salt_round : 12,
     todo_title_length : 50,
     todo_description_maxLength : 300,
+    bulk_create_max : 50
 })
 
 export const http_status = {

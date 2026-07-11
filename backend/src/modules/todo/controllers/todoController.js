@@ -14,3 +14,7 @@ export const createTodo = asyncHandler(async(req,res)=>{
     new ApiResponse(http_status.created, todo, 'todo created successfully').send(res)
 
 })
+
+export const createBulkTodos = asyncHandler(async(req,rse)=>{
+    const todos = req.body?.todos || []
+})
