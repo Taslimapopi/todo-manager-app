@@ -4,9 +4,9 @@
 
 import { UserRepository } from "../modules/auth/repositories/authRepository.js";
 import { http_status } from "../shared/constant.js";
-import { ApiError } from "../utils/apiError";
+import { ApiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { verifyAccessToken } from "../utils/jwt";
+import { verifyAccessToken } from "../utils/jwt.js";
 
 // const userRepository = createAuthRepository()
 
@@ -28,7 +28,7 @@ export const protect = asyncHandler(async(req,_parse,next)=>{
 
     const token = authHeader.split(' ').at(1)
     const decoded = verifyAccessToken(token)
-    const user = userRepository.findById(decoded.id , '-password, -__v')
+    const user =await userRepository.findById(decoded.id , '-password -__v')
     if(!user){
         throw new ApiError(http_status.unAuthorized,'not authorized and no user found')
 
