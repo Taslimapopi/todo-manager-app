@@ -33,4 +33,15 @@ export class TodoService {
             throw error
         }
     }
+    async createBulk(todosArray, userId){
+        const todoWithUser = (todosArray || []).map(todo=>({
+            ...todo, user: userId
+        }))
+        try{
+            const created = await this.todoRepository.insertMany(todoWithUser)
+            return {count : created.length, todos : created}
+        }catch(error){
+            console.error(error)
+        }
+    }
 }

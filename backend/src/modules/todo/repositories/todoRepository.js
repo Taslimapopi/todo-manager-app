@@ -1,6 +1,6 @@
 // import { Todo } from "../models/todoModel.js"
 
-import { Todo } from "../models/todoModel.js";
+import { title_collation, Todo } from "../models/todoModel.js";
 
 // export const createTodoRepository = ()=>{
 //     return {
@@ -35,5 +35,9 @@ export class TodoRepository {
                 throw new Error('duplicate title')
             }
         }
+    }
+
+    async insertMany(todos){
+        return await this.model.insertMany(todos, {ordered  :false, collation: title_collation})
     }
 }
