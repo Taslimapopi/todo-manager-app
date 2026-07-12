@@ -41,7 +41,15 @@ export class TodoService {
             const created = await this.todoRepository.insertMany(todoWithUser)
             return {count : created.length, todos : created}
         }catch(error){
-            console.error(error)
+            if(error.code === 11000 || error.name === 'MongoBulkWriteError'){
+                const inserted = error.insertedDocs ?? []
+                const failedCount  = todosArray.length - inserted.length
+                return{
+                    count : inserted.length,
+                    todo : inserted,
+                    warnings : failedCount > 0 ? `${failedCount} todos were skipped` : undefined
+                }
+            }
         }
     }
 }
