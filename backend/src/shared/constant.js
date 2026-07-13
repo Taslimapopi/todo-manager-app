@@ -13,5 +13,11 @@ export const http_status = {
     conflict : 409,
     unAuthorized : 401,
     internal_server_error : 500,
-    bad_request : 400
+    bad_request : 400,
+
 }
+
+export const pagination = Object.freeze({
+    default_page : 1,
+    max_page : 100
+})

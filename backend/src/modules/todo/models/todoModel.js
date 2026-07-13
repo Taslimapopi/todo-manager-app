@@ -1,14 +1,18 @@
 import mongoose from "mongoose";
 import { validation } from "../../../shared/constant.js";
-import { todo_status, valid_todo_status } from "../../../shared/enums.js";
+import {
+  priority_status,
+  todo_status,
+  valid_priority_status,
+  valid_todo_status,
+} from "../../../shared/enums.js";
 
 const todoSchema = new mongoose.Schema(
   {
-    user : {
-      type : mongoose.Schema.Types.ObjectId,
-      required : true,
-      ref : 'User'
-
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
     },
     title: {
       type: String,
@@ -40,6 +44,19 @@ const todoSchema = new mongoose.Schema(
       },
       default: todo_status.active,
     },
+    priority: {
+      type: String,
+      enum: {
+        value: valid_priority_status,
+        message: `${priority_status.join(", ")} is not a valid`,
+      },
+      default: priority_status.low,
+      index: true,
+    },
+    dueDate : {
+      type : Date,
+      default : null,
+    },
   },
 
   {
@@ -54,10 +71,17 @@ const todoSchema = new mongoose.Schema(
   },
 );
 
-export const title_collation = {locale : 'en', strength : 2}
+export const title_collation = { locale: "en", strength: 2 };
 
-todoSchema.index({user : 1, title: 1}, {unique : true, collation : title_collation})
-todoSchema.index({user : 1 , status : 1, createdAt : -1})
-todoSchema.index({user : 1 , title : 'text', description : 'text'})
+
+todoSchema.index({user:1, priority:1})
+todoSchema.index({user:1, dueDate:1})
+
+todoSchema.index(
+  { user: 1, title: 1 },
+  { unique: true, collation: title_collation },
+);
+todoSchema.index({ user: 1, status: 1, createdAt: -1 });
+todoSchema.index({ user: 1, title: "text", description: "text" });
 
 export const Todo = mongoose.models.Todo || mongoose.model("Todo", todoSchema);
