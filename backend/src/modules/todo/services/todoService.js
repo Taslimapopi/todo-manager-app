@@ -1,6 +1,7 @@
 // import { createTodoRepository } from "../repositories/todoRepository.js"
 
 import { http_status } from "../../../shared/constant.js";
+import { todo_status } from "../../../shared/enums.js";
 import { ApiError } from "../../../utils/apiError.js";
 import { TodoRepository } from "../repositories/todoRepository.js";
 
@@ -21,8 +22,15 @@ import { TodoRepository } from "../repositories/todoRepository.js";
 export class TodoService {
     constructor(repository = new TodoRepository()){
         this.todoRepository = repository
-
     }
+
+    static #buildQueryFilter ({status, priority, search,overdue}, userId){
+        const query = {user : userId}
+        if(overdue){
+            query.status = todo_status.active
+        }
+    }
+
     async create(todoData,userId){
         try{
             await this.todoRepository.create({...todoData, user : userId}) 
@@ -50,6 +58,12 @@ export class TodoService {
                     warnings : failedCount > 0 ? `${failedCount} todos were skipped` : undefined
                 }
             }
+
+
         }
+    }
+
+    async getAll(filters, userId) {
+
     }
 }

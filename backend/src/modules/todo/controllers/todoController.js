@@ -21,3 +21,7 @@ export const createBulkTodos = asyncHandler(async(req,res)=>{
      new ApiResponse(http_status.created, bulkTodo, `${bulkTodo?.count || 0} created successfully`).send(res)
 
 })
+
+export const getTodo = asyncHandler(async(req, res)=>{
+    const todo = await todoService.getAll()
+})
