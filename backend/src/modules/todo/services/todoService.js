@@ -28,7 +28,12 @@ export class TodoService {
         const query = {user : userId}
         if(overdue){
             query.status = todo_status.active
+            query.dueDate = {$lt: new Date (new Date().setHours(0,0,0,0))}
+        }else{
+            query.status = status
         }
+
+        if(priority) query.priority = priority
     }
 
     async create(todoData,userId){
