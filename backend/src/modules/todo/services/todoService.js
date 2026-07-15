@@ -24,7 +24,7 @@ export class TodoService {
         this.todoRepository = repository
     }
 
-    static #buildQueryFilter ({status, priority, search,overdue}, userId){
+    static #buildQueryFilter ({status, priority,overdue}, userId){
         const query = {user : userId}
         if(overdue){
             query.status = todo_status.active
@@ -34,6 +34,7 @@ export class TodoService {
         }
 
         if(priority) query.priority = priority
+        return query
     }
 
     async create(todoData,userId){
