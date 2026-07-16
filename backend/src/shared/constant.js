@@ -19,5 +19,6 @@ export const http_status = {
 
 export const pagination = Object.freeze({
     default_page : 1,
+    default_limit : 10,
     max_page : 100
 })

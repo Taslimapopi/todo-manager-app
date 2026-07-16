@@ -1,6 +1,6 @@
 // import { createTodoRepository } from "../repositories/todoRepository.js"
 
-import { http_status } from "../../../shared/constant.js";
+import { http_status, pagination } from "../../../shared/constant.js";
 import { todo_status } from "../../../shared/enums.js";
 import { ApiError } from "../../../utils/apiError.js";
 import { TodoRepository } from "../repositories/todoRepository.js";
@@ -70,6 +70,10 @@ export class TodoService {
     }
 
     async getAll(filters, userId) {
+
+        const {page = pagination.default_page, limit = pagination.default_limit, search, ...filterQuery} = filters
+
+        const filtersQuery = TodoService.#buildQueryFilter(filterQuery,userId)
 
     }
 }

@@ -1,5 +1,7 @@
 // import { Todo } from "../models/todoModel.js"
 
+import { http_status } from "../../../shared/constant.js";
+import { ApiError } from "../../../utils/apiError.js";
 import { title_collation, Todo } from "../models/todoModel.js";
 
 // export const createTodoRepository = ()=>{
@@ -21,6 +23,8 @@ import { title_collation, Todo } from "../models/todoModel.js";
 //     }
 // }
 
+const default_sort = {createdAt : -1}
+
 export class TodoRepository {
     constructor(model = Todo){
 
@@ -39,5 +43,11 @@ export class TodoRepository {
 
     async insertMany(todos){
         return await this.model.insertMany(todos, {ordered  :false, collation: title_collation})
+    }
+
+    async findWithPagination (query, {page, limit, sort = default_sort}){
+        if (page <1 || limit < 1){ throw new ApiError(http_status.bad_request,`invalid pagination params page=${page} limit=${limit}`)}
+
+        skip = (page-1)*limit
     }
 }
