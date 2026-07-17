@@ -2,6 +2,7 @@
 
 import { http_status } from "../../../shared/constant.js";
 import { ApiError } from "../../../utils/apiError.js";
+import { toPlainObject } from "../../../utils/toPlainObject.js";
 import { title_collation, Todo } from "../models/todoModel.js";
 
 // export const createTodoRepository = ()=>{
@@ -49,5 +50,11 @@ export class TodoRepository {
         if (page <1 || limit < 1){ throw new ApiError(http_status.bad_request,`invalid pagination params page=${page} limit=${limit}`)}
 
         skip = (page-1)*limit
+
+        const [todos,total] = await Promise.all([(await this.model.find(query)).toSorted(sort).skip(skip).limit(limit).lean(), this.model.countDocuments(query)])
+
+         return {todos : todos.map(toPlainObject),total}
     }
+
+   
 }

@@ -74,6 +74,14 @@ export class TodoService {
         const {page = pagination.default_page, limit = pagination.default_limit, search, ...filterQuery} = filters
 
         const filtersQuery = TodoService.#buildQueryFilter(filterQuery,userId)
+        const {todos, total } = await this.todoRepository.findWithPagination(filterQuery,{page, total})
+        return {
+            todos,
+            pagination : {
+                total,
+                currentPage : page
+            }
+        }
 
     }
 }
