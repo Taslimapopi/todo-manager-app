@@ -31,15 +31,17 @@ export class TodoRepository {
   constructor(model = Todo) {
     this.model = model;
   }
-  async create(todoData) {
+  
+async create(todoData) {
     try {
-      return await this.model.create(todoData);
+        return await this.model.create(todoData);
     } catch (error) {
-      if (error.code === 11000) {
-        throw new Error("duplicate title");
-      }
+        if (error.code === 11000) {
+            throw new Error("duplicate title");
+        }
+        throw error;   
     }
-  }
+}
 
   async insertMany(todos) {
     return await this.model.insertMany(todos, {
@@ -92,10 +94,31 @@ export class TodoRepository {
           },
         },
       };
+      const pipeline = [
+        searchStage,
+        {
+          $match : matchQuery
+        },
+        ...(sort ? [{$sort : sort}] : []),
+        {$skip:skip},
+        {$limit : limit}
+      ]
+      const countPipeline = [
+        searchStage,
+        {$match: matchQuery},
+        {$count : 'total'}
+      ]
+        const [todos, countResult] = await Promise.all([
+            this.model.aggregate(pipeline),
+            this.model.aggregate(countPipeline),
+        ]);
+
+        const total = countResult[0]?.total || 0;
+        return { todos: todos.map(toPlainObject), total };
     }
 
     const [todos, total] = await Promise.all([
-      (await this.model.find(query))
+      ( this.model.find(query))
         .toSorted(sort)
         .skip(skip)
         .limit(limit)

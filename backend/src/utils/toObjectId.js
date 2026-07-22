@@ -1,6 +1,6 @@
 import { Types } from "mongoose"
-import { ApiError } from "./apiError"
-import { http_status } from "../shared/constant"
+import { ApiError } from "./apiError.js"
+import { http_status } from "../shared/constant.js"
 
 export const toObjectId = (id , label = 'ID')=>{
     if(!Types.ObjectId.isValid(id)){

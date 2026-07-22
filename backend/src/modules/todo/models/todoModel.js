@@ -47,8 +47,8 @@ const todoSchema = new mongoose.Schema(
     priority: {
       type: String,
       enum: {
-        value: valid_priority_status,
-        message: `${priority_status.join(", ")} is not a valid`,
+        values: valid_priority_status,
+        message: `${valid_priority_status.join(", ")} is not a valid`
       },
       default: priority_status.low,
       index: true,
