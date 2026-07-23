@@ -5,7 +5,7 @@ export const toPlainObject = doc =>{
         obj = doc.toObject()
     }
     else{
-        obj = {...obj}
+        obj = {...doc}
     }
 
     if(obj._id){
