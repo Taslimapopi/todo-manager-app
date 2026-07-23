@@ -62,7 +62,7 @@ async create(todoData) {
       );
     }
 
-    skip = (page - 1) * limit;
+    const skip = (page - 1) * limit;
 
     if (search) {
       const matchQuery = { ...query };
@@ -119,7 +119,7 @@ async create(todoData) {
 
     const [todos, total] = await Promise.all([
       ( this.model.find(query))
-        .toSorted(sort)
+        .sort(sort)
         .skip(skip)
         .limit(limit)
         .lean(),

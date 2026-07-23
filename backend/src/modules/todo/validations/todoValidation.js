@@ -35,7 +35,7 @@ export const getTodoQuerySchema = z.object({
         .transform(val=> val !== undefined ? parseInt(val,10): 1)
         .pipe(z.number().int().min(pagination.default_page,'page must be at least 1')),
         limit: z.string().optional()
-        .transform(val=> val !== undefine ? parseInt(val,10): 1)
+        .transform(val=> val !== undefined ? parseInt(val,10): 1)
         .pipe(z.number().int().min(pagination.default_page).max(pagination.max_page,`page must not be exceed ${pagination.max_page}`)),
         status : z.enum(valid_todo_status).optional(),
         priority : z.enum(valid_priority_status).optional(),

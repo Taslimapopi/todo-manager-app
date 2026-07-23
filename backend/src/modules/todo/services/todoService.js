@@ -29,7 +29,7 @@ export class TodoService {
         if(overdue){
             query.status = todo_status.active
             query.dueDate = {$lt: new Date (new Date().setHours(0,0,0,0))}
-        }else{
+        }else if(status){
             query.status = status
         }
 
@@ -39,7 +39,7 @@ export class TodoService {
 
     async create(todoData,userId){
         try{
-            await this.todoRepository.create({...todoData, user : userId}) 
+            return await this.todoRepository.create({...todoData, user : userId}) 
         }catch(error){
             if(error.message==='duplicate title'){
                 throw new ApiError(http_status.conflict, 'title already existed')
@@ -74,7 +74,7 @@ export class TodoService {
         const {page = pagination.default_page, limit = pagination.default_limit, search, ...filterQuery} = filters
 
         const filtersQuery = TodoService.#buildQueryFilter(filterQuery,userId)
-        const {todos, total } = await this.todoRepository.findWithPagination(filterQuery,{page, total})
+        const {todos, total } = await this.todoRepository.findWithPagination(filtersQuery,{page,limit},search)
         return {
             todos,
             pagination : {
