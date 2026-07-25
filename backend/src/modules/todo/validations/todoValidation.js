@@ -1,4 +1,4 @@
-import z, { transform } from "zod";
+import z, { string, transform } from "zod";
 import { pagination, validation } from "../../../shared/constant.js";
 import { valid_priority_status, valid_todo_status } from "../../../shared/enums.js";
 
@@ -35,7 +35,7 @@ export const getTodoQuerySchema = z.object({
         .transform(val=> val !== undefined ? parseInt(val,10): 1)
         .pipe(z.number().int().min(pagination.default_page,'page must be at least 1')),
         limit: z.string().optional()
-        .transform(val=> val !== undefined ? parseInt(val,10): 1)
+        .transform(val=> val !== undefined ? parseInt(val,10): pagination.default_limit)
         .pipe(z.number().int().min(pagination.default_page).max(pagination.max_page,`page must not be exceed ${pagination.max_page}`)),
         status : z.enum(valid_todo_status).optional(),
         priority : z.enum(valid_priority_status).optional(),
@@ -44,4 +44,9 @@ export const getTodoQuerySchema = z.object({
                     .optional().transform(val=>val==='true')
     })
 
+})
+
+export const getTodoParamSchema = z.object({
+    params : z.strictObject({id : z.string({error: 'Id is required'}).trim()
+.regex(/^[a-f\d]{24}$/i, {error: 'Invalid Id Format'})})
 })
