@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validate } from "../../../middleware/validateMiddleware.js";
 import { createBulkTodoSchema, createTodoSchema, getTodoParamSchema, getTodoQuerySchema } from "../validations/todoValidation.js";
-import { createBulkTodos, createTodo, getTodo } from "../controllers/todoController.js";
+import { createBulkTodos, createTodo, getTodo, getTodoById } from "../controllers/todoController.js";
 import { protect } from "../../../middleware/authMiddleware.js";
 
 export const todoRoute = Router()
@@ -14,4 +14,4 @@ todoRoute.post('/bulk',validate(createBulkTodoSchema),createBulkTodos)
 
 todoRoute.get('/getTodos',validate(getTodoQuerySchema),getTodo)
 
-todoRoute.get('/todos/:id', validate(getTodoParamSchema), getTodoId)
+todoRoute.get('/getTodos/:id', validate(getTodoParamSchema), getTodoById)

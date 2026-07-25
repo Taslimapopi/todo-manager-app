@@ -7,9 +7,10 @@ export const validate = (schema) =>async (req, _res, next) => {
     const parsed =await schema.parseAsync({
       body: req.body,
       query: req.query,
+      params: req.params
     });
 
-    ["body", "query"].forEach((key) => {
+    ["body", "query","params"].forEach((key) => {
       if (key in parsed) {
         Object.defineProperty(req, key, {
           value: parsed[key],

@@ -43,6 +43,15 @@ async create(todoData) {
     }
 }
 
+#ownerFilter(id, userId) {
+
+  return {
+    _id : toObjectId(id, 'Todo Id'),
+    user : toObjectId(userId, 'user Id')
+  }
+
+}
+
   async insertMany(todos) {
     return await this.model.insertMany(todos, {
       ordered: false,
@@ -127,5 +136,10 @@ async create(todoData) {
     ]);
 
     return { todos: todos.map(toPlainObject), total };
+  }
+
+  async findOneByIdAndUser (id, userId) {
+    const todo = await this.model.findOne(this.#ownerFilter(id, userId)).lean()
+    return toPlainObject(todo)
   }
 }
