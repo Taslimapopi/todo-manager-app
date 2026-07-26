@@ -7,10 +7,10 @@ const objectIdSchema =z.string({error: 'Id is required'}).trim()
 
 const emptyToUndefined = schema = z.preprocess(val=>(val === '' || val === null  ? undefine : val), schema)
 
-const updateDueDateSchema = dueDateSchema()
+const dueDateSchema = z.coerce.date({error : 'Due date must be valid date'})
 
 const updateTodoSchemaItem = todoSchemaItems.extend({
-    dueDate : emptyToUndefined(updateDueDateSchema)
+    dueDate : emptyToUndefined(dueDateSchema.optional)
 })
 
 
@@ -63,5 +63,6 @@ export const getTodoParamSchema = z.object({
 })
 
 export const updateTodoSchema =z.object({
-    params : z.strictObject({id : objectIdSchema})
+    params : z.strictObject({id : objectIdSchema}),
+    body : updateTodoSchemaItem.partial().refine(data=>object.values(data).some(val=>val!== undefined),{error:'at least one field must be provided'})
 })
