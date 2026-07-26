@@ -152,5 +152,12 @@ async create(todoData) {
   return toPlainObject(todo)
   }
 
+  async deleteOneByIdAndUser (id, userId){
+    const todo = await this.model.findOneAndDelete(this.#ownerFilter(id,userId))
+    return toPlainObject(todo)
+  }
+
   
+
+
 }

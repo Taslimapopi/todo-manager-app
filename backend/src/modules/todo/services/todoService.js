@@ -113,4 +113,14 @@ export class TodoService {
 
     return todo;
   }
+
+  async delete (id, userId){
+    const todo = await this.todoRepository.deleteOneByIdAndUser(id, userId)
+    if(!todo){
+      throw new ApiError(http_status.not_found, "todo not found")
+    }
+
+    return todo
+  }
+
 }
