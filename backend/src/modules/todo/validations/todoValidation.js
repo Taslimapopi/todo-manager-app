@@ -2,6 +2,18 @@ import z, { string, transform } from "zod";
 import { pagination, validation } from "../../../shared/constant.js";
 import { valid_priority_status, valid_todo_status } from "../../../shared/enums.js";
 
+const objectIdSchema =z.string({error: 'Id is required'}).trim()
+.regex(/^[a-f\d]{24}$/i, {error: 'Invalid Id Format'})
+
+const emptyToUndefined = schema = z.preprocess(val=>(val === '' || val === null  ? undefine : val), schema)
+
+const updateDueDateSchema = dueDateSchema()
+
+const updateTodoSchemaItem = todoSchemaItems.extend({
+    dueDate : emptyToUndefined(updateDueDateSchema)
+})
+
+
 const todoSchemaItems =  z.object({
         title : z.string()
                 .trim()
@@ -47,6 +59,9 @@ export const getTodoQuerySchema = z.object({
 })
 
 export const getTodoParamSchema = z.object({
-    params : z.strictObject({id : z.string({error: 'Id is required'}).trim()
-.regex(/^[a-f\d]{24}$/i, {error: 'Invalid Id Format'})})
+    params : z.strictObject({id : objectIdSchema})
+})
+
+export const updateTodoSchema =z.object({
+    params : z.strictObject({id : objectIdSchema})
 })

@@ -15,3 +15,5 @@ todoRoute.post('/bulk',validate(createBulkTodoSchema),createBulkTodos)
 todoRoute.get('/getTodos',validate(getTodoQuerySchema),getTodo)
 
 todoRoute.get('/getTodos/:id', validate(getTodoParamSchema), getTodoById)
+
+todoRoute.get('/updateTodo', validate(updateTodoSchema),updateTodo)
