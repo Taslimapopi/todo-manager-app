@@ -100,4 +100,17 @@ export class TodoService {
 
     return todo;
   }
+
+  async update(id, updateData, userId) {
+    const todo = await this.todoRepository.updateOneByIdAndUser(
+      id,
+      updateData,
+      userId,
+    );
+    if (!todo) {
+      throw new ApiError(http_status.not_found, "todo not found");
+    }
+
+    return todo;
+  }
 }

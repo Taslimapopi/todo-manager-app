@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validate } from "../../../middleware/validateMiddleware.js";
-import { createBulkTodoSchema, createTodoSchema, getTodoParamSchema, getTodoQuerySchema } from "../validations/todoValidation.js";
-import { createBulkTodos, createTodo, getTodo, getTodoById } from "../controllers/todoController.js";
+import { createBulkTodoSchema, createTodoSchema, getTodoParamSchema, getTodoQuerySchema, updateTodoSchema } from "../validations/todoValidation.js";
+import { createBulkTodos, createTodo, getTodo, getTodoById, updateTodo } from "../controllers/todoController.js";
 import { protect } from "../../../middleware/authMiddleware.js";
 
 export const todoRoute = Router()

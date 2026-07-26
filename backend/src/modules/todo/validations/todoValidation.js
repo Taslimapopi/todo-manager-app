@@ -5,13 +5,11 @@ import { valid_priority_status, valid_todo_status } from "../../../shared/enums.
 const objectIdSchema =z.string({error: 'Id is required'}).trim()
 .regex(/^[a-f\d]{24}$/i, {error: 'Invalid Id Format'})
 
-const emptyToUndefined = schema = z.preprocess(val=>(val === '' || val === null  ? undefine : val), schema)
+const emptyToUndefined = schema => z.preprocess(val=>(val === '' || val === null  ? undefined : val), schema)
 
 const dueDateSchema = z.coerce.date({error : 'Due date must be valid date'})
 
-const updateTodoSchemaItem = todoSchemaItems.extend({
-    dueDate : emptyToUndefined(dueDateSchema.optional)
-})
+
 
 
 const todoSchemaItems =  z.object({
@@ -22,12 +20,16 @@ const todoSchemaItems =  z.object({
         description : z.string()
                 .trim()
                 .min(1,'description is required')
-                .max(validation.todo_description_maxLength, `title cannot be exceed ${validation.todo_description_maxLength}`),
+                .max(validation.todo_description_maxLength, `description cannot be exceed ${validation.todo_description_maxLength}`),
         status : z.enum(valid_todo_status, {
             message: `status must be ${valid_todo_status.join(', ')}`
         })
         .optional(),
     })
+
+const updateTodoSchemaItem = todoSchemaItems.extend({
+    dueDate : emptyToUndefined(dueDateSchema.optional())
+})
 
 export const createTodoSchema = z.object({
     body :todoSchemaItems
@@ -64,5 +66,5 @@ export const getTodoParamSchema = z.object({
 
 export const updateTodoSchema =z.object({
     params : z.strictObject({id : objectIdSchema}),
-    body : updateTodoSchemaItem.partial().refine(data=>object.values(data).some(val=>val!== undefined),{error:'at least one field must be provided'})
+    body : updateTodoSchemaItem.partial().refine(data=>Object.values(data).some(val=>val!== undefined),{error:'at least one field must be provided'})
 })

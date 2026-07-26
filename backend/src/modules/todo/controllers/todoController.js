@@ -31,3 +31,8 @@ export const getTodoById = asyncHandler(async (req, res)=>{
     const todo = await todoService.getById(req.params?.id, req.user?.id)
     new ApiResponse(http_status.ok, todo , 'todo retrieved successfully').send(res)
 })
+
+export const updateTodo = asyncHandler(async (req, res)=>{
+    const todo = await todoService.update(req.params?.id, req.body, req.user?.id)
+    new ApiResponse(http_status.ok, todo, 'todo update successfully').send(res)
+})
