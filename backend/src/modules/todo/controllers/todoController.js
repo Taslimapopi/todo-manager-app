@@ -41,3 +41,7 @@ export const deleteTodo = asyncHandler(async(req, res)=>{
     const todo = await todoService.delete(req.params?.id, req.user?.id)
     new ApiResponse(http_status.ok, todo, 'todo deleted successfully').send(res)
 })
+
+export const deleteAllTodos  = asyncHandler(async (req, res)=>{
+    const todos = await todoService.deleteAll(req.user?.id)
+})
