@@ -123,4 +123,11 @@ export class TodoService {
     return todo
   }
 
+  async deleteAll(userId) {
+    const todos = await this.todoRepository.deleteManyUser(userId)
+    return {
+      deletedCount : todos.deletedCount
+    }
+  }
+
 }

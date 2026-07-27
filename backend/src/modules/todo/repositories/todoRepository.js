@@ -157,6 +157,14 @@ async create(todoData) {
     return toPlainObject(todo)
   }
 
+  async deleteManyUser (userId) {
+    const todos = await this.model.deleteMany({user : toObjectId(userId, 'user Id')})
+
+    return {
+      deletedCount : todos.deletedCount
+    }
+  }
+
   
 
 
