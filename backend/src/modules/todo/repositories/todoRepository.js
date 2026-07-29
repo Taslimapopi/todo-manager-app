@@ -31,26 +31,26 @@ export class TodoRepository {
   constructor(model = Todo) {
     this.model = model;
   }
-  
-async create(todoData) {
+
+  async create(todoData) {
     try {
-        return await this.model.create(todoData);
+      return await this.model.create(todoData);
     } catch (error) {
-        if (error.code === 11000) {
-            throw new Error("duplicate title");
-        }
-        throw error;   
+      if (error.code === 11000) {
+        throw new Error("duplicate title");
+      }
+      throw error;
     }
-}
-
-#ownerFilter(id, userId) {
-
-  return {
-    _id : toObjectId(id, 'Todo Id'),
-    user : toObjectId(userId, 'user Id')
   }
 
-}
+  #ownerFilter(id, userId) {
+
+    return {
+      _id: toObjectId(id, 'Todo Id'),
+      user: toObjectId(userId, 'user Id')
+    }
+
+  }
 
   async insertMany(todos) {
     return await this.model.insertMany(todos, {
@@ -79,6 +79,8 @@ async create(todoData) {
         matchQuery.user = toObjectId(matchQuery.user, "User Id");
       }
 
+      const fuzzyOptions = search.length > 2 ? { fuzzy: { maxEdits: 1 } } : {};
+
       const searchStage = {
         $search: {
           index: "todo-autocomplete",
@@ -88,14 +90,14 @@ async create(todoData) {
                 autocomplete: {
                   query: search,
                   path: "title",
-                  fuzzy: { maxEdits: 1 },
+                  ...fuzzyOptions
                 },
               },
               {
                 autocomplete: {
                   query: search,
                   path: "description",
-                  fuzzy: { maxEdits: 1 },
+                  ...fuzzyOptions
                 },
               },
             ],
@@ -106,28 +108,28 @@ async create(todoData) {
       const pipeline = [
         searchStage,
         {
-          $match : matchQuery
+          $match: matchQuery
         },
-        ...(sort ? [{$sort : sort}] : []),
-        {$skip:skip},
-        {$limit : limit}
+        ...(sort ? [{ $sort: sort }] : []),
+        { $skip: skip },
+        { $limit: limit }
       ]
       const countPipeline = [
         searchStage,
-        {$match: matchQuery},
-        {$count : 'total'}
+        { $match: matchQuery },
+        { $count: 'total' }
       ]
-        const [todos, countResult] = await Promise.all([
-            this.model.aggregate(pipeline),
-            this.model.aggregate(countPipeline),
-        ]);
+      const [todos, countResult] = await Promise.all([
+        this.model.aggregate(pipeline),
+        this.model.aggregate(countPipeline),
+      ]);
 
-        const total = countResult[0]?.total || 0;
-        return { todos: todos.map(toPlainObject), total };
+      const total = countResult[0]?.total || 0;
+      return { todos: todos.map(toPlainObject), total };
     }
 
     const [todos, total] = await Promise.all([
-      ( this.model.find(query))
+      (this.model.find(query))
         .sort(sort)
         .skip(skip)
         .limit(limit)
@@ -138,34 +140,34 @@ async create(todoData) {
     return { todos: todos.map(toPlainObject), total };
   }
 
-  async findOneByIdAndUser (id, userId) {
+  async findOneByIdAndUser(id, userId) {
     const todo = await this.model.findOne(this.#ownerFilter(id, userId)).lean()
     return toPlainObject(todo)
   }
 
-  async updateOneByIdAndUser(id, updateData, userId){
+  async updateOneByIdAndUser(id, updateData, userId) {
     const todo = await this.model.findOneAndUpdate(this.#ownerFilter(id, userId),
-  {$set: updateData},{
-    returnDocument: 'after',
-    runValidators: true
-  }).lean()
-  return toPlainObject(todo)
-  }
-
-  async deleteOneByIdAndUser (id, userId){
-    const todo = await this.model.findOneAndDelete(this.#ownerFilter(id,userId))
+      { $set: updateData }, {
+      returnDocument: 'after',
+      runValidators: true
+    }).lean()
     return toPlainObject(todo)
   }
 
-  async deleteManyUser (userId) {
-    const todos = await this.model.deleteMany({user : toObjectId(userId, 'user Id')})
+  async deleteOneByIdAndUser(id, userId) {
+    const todo = await this.model.findOneAndDelete(this.#ownerFilter(id, userId))
+    return toPlainObject(todo)
+  }
+
+  async deleteManyUser(userId) {
+    const todos = await this.model.deleteMany({ user: toObjectId(userId, 'user Id') })
 
     return {
-      deletedCount : todos.deletedCount
+      deletedCount: todos.deletedCount
     }
   }
 
-  
+
 
 
 }

@@ -114,9 +114,9 @@ export class TodoService {
     return todo;
   }
 
-  async delete (id, userId){
+  async delete(id, userId) {
     const todo = await this.todoRepository.deleteOneByIdAndUser(id, userId)
-    if(!todo){
+    if (!todo) {
       throw new ApiError(http_status.not_found, "todo not found")
     }
 
@@ -126,7 +126,7 @@ export class TodoService {
   async deleteAll(userId) {
     const todos = await this.todoRepository.deleteManyUser(userId)
     return {
-      deletedCount : todos.deletedCount
+      deletedCount: todos.deletedCount
     }
   }
 

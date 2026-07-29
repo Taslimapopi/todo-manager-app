@@ -49,9 +49,9 @@ const todoSchema = new mongoose.Schema(
       default: priority_status.low,
       index: true,
     },
-    dueDate : {
-      type : Date,
-      default : null,
+    dueDate: {
+      type: Date,
+      default: null,
     },
   },
 
@@ -64,14 +64,14 @@ const todoSchema = new mongoose.Schema(
 export const title_collation = { locale: "en", strength: 2 };
 
 
-todoSchema.index({user:1, priority:1})
-todoSchema.index({user:1, dueDate:1})
+todoSchema.index({ user: 1, priority: 1 })
+todoSchema.index({ user: 1, dueDate: 1 })
 
 todoSchema.index(
   { user: 1, title: 1 },
   { unique: true, collation: title_collation },
 );
 todoSchema.index({ user: 1, status: 1, createdAt: -1 });
-todoSchema.index({title: "text", description: "text" });
+todoSchema.index({ title: "text", description: "text" });
 
 export const Todo = mongoose.models.Todo || mongoose.model("Todo", todoSchema);
